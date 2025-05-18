@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,24 +18,23 @@
         <div id="qrCode" class="mt-4"></div>
     </div>
 
-
     <script>
         async function generateQR() {
             const url = document.getElementById('urlInput').value;
             if (!url) {
-                alert("Please enter URL");
+                alert("Please enter a URL");
                 return;
             }
-            const response = await fetch(`http://localhost:3000/generator?url=${encodeURIComponent(url)}`);
 
-            const data = await response.json();
-            const qrCode = document.getElementById('qrCode');
-            qrCode.innerHTML = `<img src="${data.qr_png}" alt="QR Code">`;
-
-
-
+            try {
+                const response = await fetch(`http://localhost:3000/generate?url=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                document.getElementById('qrCode').innerHTML = `<img src="${data.qr}" alt="QR Code" class="mx-auto mt-4"/>`;
+            } catch (err) {
+                alert("Failed to generate QR code.");
+                console.error(err);
+            }
         }
-
     </script>
 </body>
 
